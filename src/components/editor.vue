@@ -72,7 +72,11 @@ export default {
     // 注册事件
     this.initEvent()
     // 初始化value值
-    this.contentValue = getDomValue(this.$refs.editor)
+    this.contentValue = this.value
+  },
+  destroyed () {
+    // 删除事件
+    this.removeEvent()
   },
   computed: {
     textCount() {
@@ -91,11 +95,22 @@ export default {
   },
   methods: {
     initEvent () {
+      // 注册监听事件
       this.$refs.editor.addEventListener('focus', this.changeContentValue, true)
       this.$refs.editor.addEventListener('input', this.changeContentValue)
+      this.$refs.editor.addEventListener('DOMSubtreeModified', this.changeContentValue)
+    },
+    removeEvent () {
+      // 移除监听事件
+      this.$refs.editor.removeEventListener('focus', this.changeContentValue, true)
+      this.$refs.editor.removeEventListener('input', this.changeContentValue)
+      this.$refs.editor.removeEventListener('DOMSubtreeModified', this.changeContentValue)
     },
     changeContentValue () {
+      // 更新值
       this.contentValue =  getDomValue(this.$refs.editor).replace(/^\n/, '').replace(/\n$/, '')
+      // 同时更行v-model绑定的值
+      this.$emit('input', this.contentValue)
     }
   }
 }
