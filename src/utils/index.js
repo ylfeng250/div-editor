@@ -1,7 +1,9 @@
-import { getDomValue, insertHtmlAtCaret } from './dom-utils'
+import { getDomValue, insertHtmlAtCaret, getCursortPosition, debounce } from './dom-utils'
 import { emojiMap } from './emojis'
 export {
   getDomValue,
   emojiMap,
-  insertHtmlAtCaret
+  insertHtmlAtCaret,
+  getCursortPosition,
+  debounce
 }

@@ -15,6 +15,7 @@
     </div>
     <hr>
     <div class="show"></div>
+    <at :editor="textarea" v-if="isMounted"></at>
   </div>
 </template>
 
@@ -66,6 +67,7 @@
 
 <script>
 import { getDomValue, emojiMap, insertHtmlAtCaret } from "../utils";
+import At from './at'
 import EmojiBox from "./emoji-box";
 export default {
   name: "editor",
@@ -84,11 +86,14 @@ export default {
     }
   },
   components: {
-    EmojiBox
+    EmojiBox,
+    At
   },
   data() {
     return {
-      contentValue: ""
+      contentValue: "",
+      textarea: '',
+      isMounted: false
     };
   },
   mounted() {
@@ -96,6 +101,9 @@ export default {
     this.initEvent();
     // 初始化value值
     this.contentValue = this.value
+    this.textarea = this.$refs.editor
+    // 控制子组件在父组件之后初始化
+    this.isMounted = true
   },
   beforeDestroy() {
     // 删除事件
@@ -171,6 +179,7 @@ export default {
       this.contentValue = getDomValue(this.$refs.editor)
         .replace(/^\n/, "")
         .replace(/\n$/, "")
+      this.$refs.editor.value = this.contentValue
       // 同时更行v-model绑定的值
       this.$emit("input", this.contentValue)
     },
