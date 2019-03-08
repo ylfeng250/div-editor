@@ -10,6 +10,7 @@
     </div>
     <div class="edit-bottom">
       <emoji-box @select="selectEmoji"></emoji-box>
+      <button @click="addTopic" @mousedown="OnMousedown">添加话题</button>
       <button class="send-btn" @click="sendMessage">发送</button>
     </div>
     <hr>
@@ -64,7 +65,7 @@
 </style>
 
 <script>
-import { getDomValue, emojiMap } from "../utils";
+import { getDomValue, emojiMap, insertHtmlAtCaret } from "../utils";
 import EmojiBox from "./emoji-box";
 export default {
   name: "editor",
@@ -179,10 +180,24 @@ export default {
       document.execCommand('insertHTML', false, img)
     },
     // 发送消息
-    sendMessage () {
+    sendMessage (event) {
       var show = document.querySelector('.show')
       console.log(this.contentValue)
       show.textContent = JSON.stringify(this.contentValue)
+    },
+    OnMousedown (event) {
+      event.preventDefault()
+    },
+    addTopic (event) {
+      this.$refs.editor.focus()
+      insertHtmlAtCaret('#')
+      insertHtmlAtCaret('请输入一个话题')
+      insertHtmlAtCaret('#')
+      var range = window.getSelection().getRangeAt(0)
+      console.log(range)
+      range.selectNodeContents(range.startContainer.childNodes[range.startOffset - 2])
+      // range.setStart(range.startContainer, range.startOffset - 1)
+      // range.collapse(true)
     }
   }
 };
