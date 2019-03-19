@@ -101,6 +101,7 @@ export default {
     this.initEvent();
     // 初始化value值
     this.contentValue = this.value
+    this.$refs.editor.value = this.contentValue
     this.textarea = this.$refs.editor
     // 控制子组件在父组件之后初始化
     this.isMounted = true
@@ -151,7 +152,7 @@ export default {
       )
       this.$refs.editor.removeEventListener("input", this.changeContentValue);
       this.$refs.editor.removeEventListener(
-        "DOMSubtreeModified",
+        "DOMNodeInserted",
         this.changeContentValue
       )
       this.$refs.editor.removeEventListener(
@@ -191,7 +192,7 @@ export default {
     // 发送消息
     sendMessage (event) {
       var show = document.querySelector('.show')
-      console.log(this.contentValue)
+      // console.log(this.contentValue)
       show.textContent = JSON.stringify(this.contentValue)
     },
     OnMousedown (event) {
@@ -203,7 +204,7 @@ export default {
       insertHtmlAtCaret('请输入一个话题')
       insertHtmlAtCaret('#')
       var range = window.getSelection().getRangeAt(0)
-      console.log(range)
+      // console.log(range)
       range.selectNodeContents(range.startContainer.childNodes[range.startOffset - 2])
       // range.setStart(range.startContainer, range.startOffset - 1)
       // range.collapse(true)

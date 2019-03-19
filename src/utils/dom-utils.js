@@ -66,14 +66,14 @@ function getCursortPosition (element) {
 }
 
 function debounce(func, wait) {
-  var timeout;
+  var timer = null;
 
   return function() {
-    var context = this;
-    var args = arguments;
+    var context = this
+    var args = arguments
 
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
+    timer && clearTimeout(timer)
+    timer = setTimeout(function() {
       func.apply(context, args)
     }, wait)
   }
