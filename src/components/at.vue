@@ -11,10 +11,11 @@
 <style scoped>
 .at-box {
   position: absolute;
+  background: #fff;
 }
 .userlist {
   width: 80px;
-  height: 120px;
+  height: 130px;
   overflow: auto;
   margin: 0;
   padding: 0 3px;
@@ -22,11 +23,14 @@
   border-radius: 5px;
 }
 .userlist li {
-  border-bottom: 1px solid;
+  cursor: pointer;
+}
+.userlist li:hover {
+  color: red;
+  background: rgb(223, 218, 218);
 }
 .mousehover{
   background: rgb(223, 218, 218);
-  cursor: pointer;
 }
 </style>
 
@@ -95,7 +99,7 @@ export default {
         // @与光标之间的字符
         const filterText = fullText.substring(atIndex + 1)
         // 判断是否为合法字符
-        const regx = /^[\u4e00-\u9fa5_a-zA-Z0-9]*$/ // 匹配和发用户的正则
+        const regx = /^[\u4e00-\u9fa5_a-zA-Z0-9]*$/ // 匹配合法用户的正则
         if (regx.test(filterText)) {
           this.handleFilterUser (filterText)
         } else {
@@ -113,7 +117,7 @@ export default {
           this.filterUser.push(u)
         }
       })
-      this.filterUser.sort()
+      this.filterUser = this.filterUser.sort().slice(0,6)
     },
     changePlace() {
       // 修改选择框的位置
