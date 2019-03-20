@@ -11,6 +11,7 @@
     contenteditable="true" 
     ref="editor"></div>
     <span class="input-num">{{ inputNum }}</span>
+    <at :editor="textarea" v-if="isMounted"></at>
   </div>
   <div class="publish-tools">
     <div class="icon-btn">
@@ -31,7 +32,8 @@
   <emoji-box 
     v-if="isMounted" 
     :emojiBtn="emojiBtn"
-    @select="selectEmoji"></emoji-box>
+    @select="selectEmoji">
+  </emoji-box>
 </div>
 </template>
 
@@ -99,6 +101,7 @@
 import { getDomValue, emojiMap, insertHtmlAtCaret } from "../utils"
 
 import emojiBox from './emoji-box'
+import At from './at'
 export default {
   name: 'div-editor',
   props: {
@@ -122,7 +125,8 @@ export default {
     value: {}
   },
   components: {
-    emojiBox
+    emojiBox,
+    At
   },
   data() {
     return {
@@ -150,6 +154,7 @@ export default {
   mounted() {
     // 初始化的时候让输入框自动聚焦
     this.$nextTick(() => {
+      this.textarea = this.$refs.editor
       this.$refs.editor.focus()
       this.isMounted = true
       this.emojiBtn = this.$refs.emojiBtn
