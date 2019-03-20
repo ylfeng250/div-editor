@@ -1,22 +1,60 @@
 <template>
   <div id="app">
-    <editor v-model="content"></editor>
+    <div class="demo">
+      <div-editor
+      :min-height="100"
+      :max-height="300"
+      :palceholder="placeholder"
+      v-model="userInput"
+      class="publish-box"
+      @sendMessage="sendMessage"
+      >
+        <div class="publish-title">基于Vue的富文本输入框</div>
+      </div-editor>
+      <hr>
+      <h2>发送消息展示</h2>
+      <p ref="message"></p>
+    </div>
   </div>
 </template>
-<style scoped>
-</style>
 
 <script>
-import Editor from './components/editor'
+import divEditor from './components/div-editor'
+
 export default {
   name: 'App',
   components: {
-    Editor
+    divEditor
   },
-  data () {
+  data() {
     return {
-      content: ''
+      placeholder: '请输入你的想法',
+      userInput: ''
+    }
+  },
+  methods: {
+    sendMessage(val) {
+      const message = this.$refs.message
+      message.textContent = val
     }
   }
 }
 </script>
+
+<style>
+#app {
+  display: flex;
+  justify-content: center;
+}
+.publish-box {
+  width: 600px;
+}
+.publish-title {
+  text-align: center;
+}
+.message {
+  border: 1px solid;
+  height: 400px;
+  overflow: auto;
+}
+</style>

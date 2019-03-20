@@ -1,3 +1,5 @@
+// 获取目标节点的纯文本内容
+// 这里只涉及到了之后可能会用到的一些节点
 function getDomValue (elem) {
   var res = ''
   Array.from(elem.childNodes).forEach((child) => {
@@ -16,6 +18,7 @@ function getDomValue (elem) {
   return res
 }
 
+// 往光标位置插入HTML片段
 function insertHtmlAtCaret (html) {
   var sel, range, frag
   if (window.getSelection) {
@@ -43,6 +46,7 @@ function insertHtmlAtCaret (html) {
   }
 }
 
+// 获取光标位置
 function getCursortPosition (element) {
   var caretOffset = 0
   var doc = element.ownerDocument || element.document
@@ -65,6 +69,7 @@ function getCursortPosition (element) {
   return caretOffset
 }
 
+// 防抖函数
 function debounce(func, wait) {
   var timer = null;
 
