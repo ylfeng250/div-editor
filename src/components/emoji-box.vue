@@ -6,7 +6,7 @@
     </div>
     <ul class="emoji-list" @click="selectEmoji">
       <li v-for="(url,emoji) in emojiMap" :key="emoji" class="emoji-item">
-        <img :src="url" :alt="emoji">
+        <img :src="url" :alt="emoji" :title="emoji">
       </li>
     </ul>
   </div>
