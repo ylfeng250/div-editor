@@ -11,7 +11,11 @@
     contenteditable="true" 
     ref="editor"></div>
     <span class="input-num">{{ inputNum }}</span>
-    <at :editor="textarea" v-if="isMounted"></at>
+    <at :users="users" :textarea="textarea" v-if="isMounted" @select="handleSelectUser">
+      <template v-slot:item="user">
+        <span>{{user.item}}</span>
+      </template>
+    </at>
   </div>
   <div class="publish-tools">
     <div class="icon-btn">
@@ -95,10 +99,17 @@
   .submit:hover {
     background: #38b7e9;
   }
+  .user-btn {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    border-style: none; 
+    color: #38b7e9;
+  }
 </style>
 
 <script>
-import { getDomValue, emojiMap, insertHtmlAtCaret } from "../utils"
+import { getDomValue, emojiMap, insertHtmlAtCaret, getCursortPosition } from "../utils"
 
 import emojiBox from './emoji-box'
 import At from './at'
@@ -132,7 +143,8 @@ export default {
     return {
       contentValue: '',
       defaultTopic: '请输入一个话题',
-      isMounted: false
+      isMounted: false,
+      users: ['孙悟空', '孙悟饭', 'jack', 'tom', 'bob', 'jk', 'lalala', '18号', 'No.96']
     }
   },
   computed: {
@@ -217,6 +229,24 @@ export default {
     selectEmoji(emoji) {
       var img = `<img src="${emojiMap[emoji]}" alt="${emoji}" style="vertical-align:-6px; display: inline-block">`
       document.execCommand('insertHTML', false, img)
+    },
+    handleSelectUser(user) {
+      // 获取输入框中的值
+      const fullText = this.textarea.value
+      // 获取光标位置
+      const end = getCursortPosition(this.textarea)
+      // 光标之前用户名最大可能长度的文本
+      const content = fullText.slice(end-this.maxLength, end)
+      // 获取离光标最近的一个@的位置
+      const lastAtIndex = content.lastIndexOf('@')
+      const offset = end - lastAtIndex
+      // 删除之前的内容
+      var range = window.getSelection().getRangeAt(0)
+      range.setStart(range.endContainer, range.endOffset - offset)
+      range.deleteContents()
+      // 插入选中的user
+      var input = `<button contenteditable="false" class="user-btn">@${user}&nbsp;</button>`
+      insertHtmlAtCaret(input)
     },
     // 发送消息
     sendMessage (event) {

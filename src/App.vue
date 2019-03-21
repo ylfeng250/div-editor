@@ -2,14 +2,14 @@
   <div id="app">
     <div class="demo">
       <div-editor
-      :min-height="100"
-      :max-height="300"
-      :palceholder="placeholder"
-      v-model="userInput"
-      class="publish-box"
-      @sendMessage="sendMessage"
-      >
-        <div class="publish-title">基于Vue的富文本输入框</div>
+        :min-height="100"
+        :max-height="300"
+        :palceholder="placeholder"
+        v-model="userInput"
+        class="publish-box"
+        @sendMessage="sendMessage"
+        >
+        <div class="publish-title">基于Vue的富文本消息发布框</div>
       </div-editor>
       <hr>
       <h2>发送消息展示</h2>
@@ -20,7 +20,6 @@
 
 <script>
 import divEditor from './components/div-editor'
-
 export default {
   name: 'App',
   components: {
