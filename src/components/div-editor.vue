@@ -9,7 +9,7 @@
     :style="{'min-height':minh,'max-height':maxh }"
     class="edit-panel" 
     contenteditable="true" 
-    @DOMNodeRemoved="handleDOMRemoved"
+    @keydown="handleDOMRemoved"
     ref="editor"></div>
     <span class="input-num">{{ inputNum }}</span>
     <at :users="users" :textarea="textarea" v-if="isMounted" @select="handleSelectUser">
@@ -238,10 +238,8 @@ export default {
       const fullText = this.textarea.value.replace(/\n/g, '')
       // 获取光标位置
       const end = getCursortPosition(this.textarea)
-      // 光标之前用户名最大可能长度的文本
-      const content = fullText.slice(end-this.maxLength, end)
       // 获取离光标最近的一个@的位置
-      const lastAtIndex = content.lastIndexOf('@')
+      const lastAtIndex = fullText.lastIndexOf('@')
       const offset = end - lastAtIndex
       // 删除之前的内容
       var range = window.getSelection().getRangeAt(0)
@@ -257,7 +255,25 @@ export default {
     },
     // 处理节点的删除
     handleDOMRemoved(e) {
-      console.log(e)
+      if (e.keyCode === 8) {
+        // 获取输入框中的值
+        const fullText = this.textarea.value.replace(/\n/g, '')
+        // 获取光标位置
+        const end = getCursortPosition(this.textarea)
+        // 光标之前用户名最大可能长度的文本
+        const content = fullText.slice(end-this.maxLength, end)
+        // 获取离光标最近的一个@的位置
+        const lastAtIndex = fullText.lastIndexOf('@')
+        if (lastAtIndex > -1) {
+          // 如果存在 @
+          const user = fullText.slice(lastAtIndex, end).trim().replace(/@/, '')
+          const index = this.atUsers.indexOf(user)
+          if (index > -1) {
+            // 从@列表中删除被@的用户
+            this.atUsers.splice(index, 1)
+          }
+        }
+      }
     },
     // 发送消息
     sendMessage (event) {
