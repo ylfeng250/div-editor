@@ -9,6 +9,7 @@
     :style="{'min-height':minh,'max-height':maxh }"
     class="edit-panel" 
     contenteditable="true" 
+    @DOMNodeRemoved="handleDOMRemoved"
     ref="editor"></div>
     <span class="input-num">{{ inputNum }}</span>
     <at :users="users" :textarea="textarea" v-if="isMounted" @select="handleSelectUser">
@@ -31,7 +32,7 @@
         @click="addTopic"
         @mousedown="OnMousedown">#话题</a>
     </div>
-    <button class="submit" title="发布" @click="sendMessage">发布</button>
+    <button class="submit" title="发布" @click="sendMessage" :disabled="contentValue === ''">发布</button>
   </div>
   <emoji-box 
     v-if="isMounted" 
@@ -144,7 +145,9 @@ export default {
       contentValue: '',
       defaultTopic: '请输入一个话题',
       isMounted: false,
-      users: ['孙悟空', '孙悟饭', 'jack', 'tom', 'bob', 'jk', 'lalala', '18号', 'No.96']
+      users: ['孙悟空', '孙悟饭', 'jack', 'tom', 'bob', 'jk', 'lalala', '18号', 'No.96'],
+      // 存放被@的用户列表
+      atUsers: []
     }
   },
   computed: {
@@ -232,7 +235,7 @@ export default {
     },
     handleSelectUser(user) {
       // 获取输入框中的值
-      const fullText = this.textarea.value
+      const fullText = this.textarea.value.replace(/\n/g, '')
       // 获取光标位置
       const end = getCursortPosition(this.textarea)
       // 光标之前用户名最大可能长度的文本
@@ -247,6 +250,14 @@ export default {
       // 插入选中的user
       var input = `<button contenteditable="false" class="user-btn">@${user}&nbsp;</button>`
       insertHtmlAtCaret(input)
+      // 添加用户
+      if(!this.atUsers.includes(user)) {
+        this.atUsers.push(user)
+      }
+    },
+    // 处理节点的删除
+    handleDOMRemoved(e) {
+      console.log(e)
     },
     // 发送消息
     sendMessage (event) {

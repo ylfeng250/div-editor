@@ -6,6 +6,7 @@
         :key="index"
         :class="{'at-high-light': index === atwho.cur}"
         @click="selectUser"
+        @mousedown="OnMouseDown"
         @mouseover="handleMouseover(index)"
         class="at-item">
         <slot name="item" :item="user">
@@ -74,6 +75,9 @@ export default {
     this.initEvent()
   },
   methods: {
+    OnMouseDown(e) {
+      e.preventDefault()
+    },
     isTextareaViald() {
       return this.textarea && this.textarea.contentEditable
     },
@@ -119,7 +123,7 @@ export default {
     // 处理用户输入
     handleInput() {
       // 获取输入框中的值
-      const fullText = this.textarea.value
+      const fullText = this.textarea.value.replace(/\n/g, '')
       // 获取光标位置
       const end = getCursortPosition(this.textarea)
       // 光标之前用户名最大可能长度的文本
@@ -187,6 +191,10 @@ export default {
       this.atwho.cur = index
     },
     selectUser() {
+      // 选择之后隐藏列表
+      this.$nextTick(() => {
+        this.atwho = null
+      })
       this.$emit('select', this.atwho.users[this.atwho.cur])
     }
   }
