@@ -4,7 +4,7 @@
       <div-editor
         :min-height="100"
         :max-height="300"
-        :palceholder="placeholder"
+        :placeholder="placeholder"
         v-model="userInput"
         class="publish-box"
         @sendMessage="sendMessage"
