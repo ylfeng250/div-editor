@@ -10,6 +10,7 @@
     class="edit-panel" 
     contenteditable="true" 
     @keydown="handleDOMRemoved"
+    @paste="onPaste"
     ref="editor"></div>
     <span class="input-num">{{ inputNum }}</span>
     <at :users="users" :textarea="textarea" v-if="isMounted" @select="handleSelectUser">
@@ -127,7 +128,7 @@ export default {
     },
     // placeholder 提示文字
     placeholder: {
-      default: '请输入的想法'
+      default: '请输入你的想法'
     },
     // 能够输入的最大字数
     maxCount: {
@@ -181,6 +182,11 @@ export default {
     // 删除事件
     this.removeEvent()
   },
+  watch: {
+    contentValue(val) {
+      this.$refs.editor.value = val
+    }
+  },
   methods: {
     OnMousedown(event) {
       event.preventDefault()
@@ -215,7 +221,6 @@ export default {
       this.contentValue = getDomValue(this.$refs.editor)
         .replace(/^\n/, "")
         .replace(/\n$/, "")
-      this.$refs.editor.value = this.contentValue
       // 同时更行v-model绑定的值
       this.$emit("input", this.contentValue)
     },
@@ -278,6 +283,7 @@ export default {
     // 发送消息
     sendMessage (event) {
       const textContent = JSON.stringify(this.contentValue)
+      this.textarea.textContent = ''
       this.$emit('sendMessage', textContent)
     },
   }
