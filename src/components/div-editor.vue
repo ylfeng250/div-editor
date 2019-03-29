@@ -106,7 +106,7 @@
     margin: 0;
     padding: 0;
     border-style: none; 
-    color: #38b7e9;
+    color: orangered;
   }
 </style>
 
@@ -283,8 +283,9 @@ export default {
     // 发送消息
     sendMessage (event) {
       const textContent = JSON.stringify(this.contentValue)
+      const html = this.textarea.innerHTML
       this.textarea.textContent = ''
-      this.$emit('sendMessage', textContent)
+      this.$emit('sendMessage', {textContent, html})
     },
   }
 }

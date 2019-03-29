@@ -1,0 +1,7 @@
+html {
+  /*100px 1rem = 100px 0.1rem = 10px*/
+  font-size: 625% !important;
+}
+body {
+  font-size: 0.16rem;
+}
